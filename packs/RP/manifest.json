@@ -1,0 +1,24 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Stackable Crafting",
+    "description": "by abcdave",
+    "uuid": "2a64ad9a-127f-11f0-82ad-9744f1a26409",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 16, 0]
+  },
+  "modules": [
+    {
+      "description": "Add-on Pack Resources",
+      "type": "resources",
+      "uuid": "586af32a-127f-11f0-9236-0b7aa2512f38",
+      "version": [1, 0, 0]
+    }
+  ],
+  "dependencies": [
+    {
+      "uuid": "3d32dc80-127f-11f0-83b7-8fcb67c2587e",
+      "version": [1, 0, 0]
+    }
+  ]
+}
