@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.6 (2025-04-07)
+
+
+### Bug Fixes
+
+* banned item drop no longer drop ([f0ef846](https://github.com/abcdavk/stackable-crafting/commit/f0ef84693573855b307d8082698eedc223560933))
+
 ### [0.0.4](https://github.com/abcdavk/stackable-crafting/compare/v0.0.3...v0.0.4) (2025-04-07)
 
 
