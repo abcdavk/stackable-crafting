@@ -617,6 +617,46 @@
             }
           ]
         }
+      },
+      {
+        "back@input_grid_panel": {
+          "grid_position": [
+            20,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                
+                "offset": [
+                  -144,
+                  96
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "next@input_grid_panel": {
+          "grid_position": [
+            21,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                
+                "offset": [
+                  -10,
+                  96
+                ]
+              }
+            }
+          ]
+        }
       }
     ]
   },

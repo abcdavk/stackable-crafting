@@ -1,6 +1,6 @@
 import { ItemStack, system, world } from "@minecraft/server"
 import { recipes } from "./recipes";
-let CRAFTING_ENTITY_ID: string = "minecraft:cow"
+let CRAFTING_ENTITY_ID: string = "dave:stackable_crafting"
 
 interface Ingredient {
     item: string;
@@ -22,7 +22,7 @@ world.afterEvents.playerPlaceBlock.subscribe(({
         let stackableCrafting = dimension.spawnEntity(CRAFTING_ENTITY_ID, block.center());
         stackableCrafting.nameTag = "§u§i§1§r§fStackable Crafting";
         let inv = stackableCrafting.getComponent("minecraft:inventory")?.container;
-        
+        stackableCrafting.setDynamicProperty('crafting:startSlot', 11);
     }
 })
 
@@ -54,7 +54,6 @@ system.runInterval(() => {
         }}
 
         nearbyEntities.forEach(entity => {
-            // Crafting system
             if (entity?.typeId !== CRAFTING_ENTITY_ID) return;
             
             entity.nameTag = "§u§i§1§r§fStackable Crafting";
@@ -62,7 +61,70 @@ system.runInterval(() => {
             const inventory = entity.getComponent("minecraft:inventory")?.container;
             if (!inventory) return;
 
-            const gridSlots = Array.from({ length: 9 }, (_, i) => inventory.getItem(i));
+            // Recipes system
+            const maxRecipeSlots = 9;
+            let startSlot = entity.getDynamicProperty('crafting:startSlot') as number || 11;
+
+            // Step 1: Deteksi jika tombol ditekan (slot kosong padahal sebelumnya ada)
+            if (inventory.getItem(20) === undefined && entity.getDynamicProperty("crafting:leftButtonWasPresent") === true) {
+                startSlot = Math.max(11, startSlot - maxRecipeSlots); // prevent < 11
+                entity.setDynamicProperty("crafting:startSlot", startSlot);
+            }
+            if (inventory.getItem(21) === undefined && entity.getDynamicProperty("crafting:rightButtonWasPresent") === true) {
+                // prevent overflow
+                const maxStart = Math.floor((recipes.length - 1) / maxRecipeSlots) * maxRecipeSlots + 11;
+                startSlot = Math.min(maxStart, startSlot + maxRecipeSlots);
+                entity.setDynamicProperty("crafting:startSlot", startSlot);
+            }
+
+            // Step 2: Render recipes
+            for (let i = 0; i < maxRecipeSlots; i++) {
+                const recipeIndex = i + (startSlot - 11);
+                if (recipes[recipeIndex]) {
+                    const recipeItem: ItemStack = recipes[recipeIndex].result();
+                    const ingredients: string[] = [" ", "§r§9Recipes:"];
+                    for (const ingr of recipes[recipeIndex].ingredient) {
+                        ingredients.push(`§r§7${ingr.item} §ox${ingr.amount}`);
+                    }
+                    ingredients.push(" ", `§r§9Result: §7${recipeItem.typeId} §ox${recipeItem.amount}`);
+                    recipeItem.setLore(ingredients);
+                    inventory.setItem(11 + i, recipeItem);
+                } else {
+                    inventory.setItem(11 + i, undefined); // Kosongkan jika tidak ada resep
+                }
+            }
+
+            // Step 3: Render tombol (hanya jika kosong)
+            if (inventory.getItem(20) === undefined) {
+                const backButton = new ItemStack("dave:left_arrow");
+                backButton.setLore([
+                    "§r§e[Shift + Right Click]/[Q] §7to craft",
+                    "§b§a§n§i§t§e§m",
+                    `Current Page: ${Math.floor((startSlot - 11) / maxRecipeSlots) + 1}`
+                ]);
+                inventory.setItem(20, backButton);
+            }
+            if (inventory.getItem(21) === undefined) {
+                const nextButton = new ItemStack("dave:right_arrow");
+                nextButton.setLore([
+                    "§r§e[Shift + Right Click]/[Q] §7to craft",
+                    "§b§a§n§i§t§e§m",
+                    `Current Page: ${Math.floor((startSlot - 11) / maxRecipeSlots) + 1}`
+                ]);
+                inventory.setItem(21, nextButton);
+            }
+
+            // Step 4: Tandai tombol sudah dipasang (untuk deteksi di loop berikutnya)
+            entity.setDynamicProperty("crafting:leftButtonWasPresent", inventory.getItem(20) !== undefined);
+            entity.setDynamicProperty("crafting:rightButtonWasPresent", inventory.getItem(21) !== undefined);
+
+
+
+            // Crafting system
+            const gridSlots = [];
+            for (let i = 0; i <= 8; i++) {
+                gridSlots.push(inventory.getItem(i))
+            }
             if (inventory.getItem(10) === undefined) {
                 const craftButton = new ItemStack("minecraft:crafting_table");
                 craftButton.nameTag = "§r§eCraft";

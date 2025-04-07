@@ -1,0 +1,11 @@
+{
+  "format_version": "1.20.41",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "dave:stackable_crafting",
+      "min_engine_version": "1.8.0",
+      "materials": { "default": "entity_alphablend", "alpha": "entity_alphablend" },
+      "textures": { "default": "textures/blocks/none" }
+    }
+  }
+}

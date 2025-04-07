@@ -2,7 +2,7 @@
     "format_version": "1.16.0",
     "minecraft:entity": {
         "description": {
-            "identifier": "minecraft:cow",
+            "identifier": "dave:stackable_crafting",
             "is_spawnable": true,
             "is_summonable": true,
             "is_experimental": false
@@ -30,7 +30,7 @@
                 "additional_slots_per_strength": 0,
                 "can_be_siphoned_from": false,
                 "container_type": "container",
-                "inventory_size": 20,
+                "inventory_size": 22,
                 "private": false,
                 "restrict_to_owner": false
             }

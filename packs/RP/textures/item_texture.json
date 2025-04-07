@@ -1,0 +1,12 @@
+{
+  "resource_pack_name": "vanilla",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "left_arrow": {
+      "textures": "textures/ui/arrowLeft"
+    },
+    "right_arrow": {
+      "textures": "textures/ui/arrowRight"
+    }
+  }
+}
