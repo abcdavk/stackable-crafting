@@ -33,7 +33,12 @@ const recipes: Recipe[] = [
                 amount: 10
             }
         ],
-        result: new ItemStack("minecraft:coal")
+        result: (() => {
+            const item = new ItemStack("minecraft:coal");
+            item.nameTag = "Super coal";
+            item.amount = 10;
+            return item;
+        })()
     }
 ];
 
@@ -100,21 +105,36 @@ system.runInterval(() => {
                     
                         // If the output can still be added
                         const isSameItemAndNotFull = outputSlot?.typeId === recipe.result.typeId &&
-                                                      outputSlot.amount < outputSlot.maxAmount;
+                                                      outputSlot.amount < outputSlot.maxAmount
                     
                         // Don't craft if can't
                         if (!isOutputEmpty && !isSameItemAndNotFull) {
                             return; // Stop crafting cause full
                         }
                     
-                        // Crafting process
                         if (isOutputEmpty) {
                             inventory.setItem(9, recipe.result);
                         } else if (isSameItemAndNotFull) {
-                            const newResult = new ItemStack(recipe.result.typeId);
-                            newResult.amount = outputSlot.amount + 1;
-                            inventory.setItem(9, newResult);
+                            const newAmount = outputSlot.amount + recipe.result.amount;
+                        
+                            player.sendMessage(`${outputSlot.amount} + ${recipe.result.amount} = ${newAmount}`);
+                            player.sendMessage(`${newAmount <= outputSlot.maxAmount}`);
+                        
+                            if (newAmount <= outputSlot.maxAmount) {
+                                const newResult = new ItemStack(recipe.result.typeId);
+                                newResult.amount = newAmount;
+                                inventory.setItem(9, newResult);
+                            } else {
+                                const newResult = new ItemStack(recipe.result.typeId);
+                                const remainsResult = new ItemStack(recipe.result.typeId);
+                                const remainsAmount = newAmount - outputSlot.maxAmount;
+                                remainsResult.amount = remainsAmount;
+                                newResult.amount = outputSlot.maxAmount;
+                                inventory.setItem(9, newResult);
+                                world.getDimension(player.dimension.id).spawnItem(remainsResult, player.location)
+                            }
                         }
+                        
                     
                         // Reducing ingredient
                         for (const ingredient of recipe.ingredient) {

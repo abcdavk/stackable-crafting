@@ -28,4 +28,8 @@ You can simply run in terminal `npm run dev`, it will export the `/packs` folder
 
 If you're using linux you must add environtment variable to `~/.profile` or `~/.zshrc` (depend on your terminal):
 
+<<<<<<< HEAD
 ```export COM_MOJANG=".../$PATH"```
+=======
+```export COM_MOJANG=".../$PATH"```
+>>>>>>> 7be32c4 (fix: fix checking item amount in the output slot)
