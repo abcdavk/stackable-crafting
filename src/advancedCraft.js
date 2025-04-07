@@ -8,8 +8,8 @@ world.afterEvents.playerPlaceBlock.subscribe(({
     block, dimension, player
 }) => {
     const { x, y, z} = block.location
-    if (block.typeId === "dave:advanced_crafting") {
-        let advancedCraft = dimension.spawnEntity("dave:advanced_crafting", block.center());
+    if (block.typeId === "dave:stackable_crafting") {
+        let advancedCraft = dimension.spawnEntity("dave:stackable_crafting", block.center());
         advancedCraft.nameTag = "§u§i§1§r§fAdvanced Craft";
         let inv = advancedCraft.getComponent("minecraft:inventory").container;
     }
@@ -33,7 +33,7 @@ system.runInterval(() => {
                 location: player.location,
                 maxDistance: 6
             }).forEach(e => {
-                if (e?.typeId == "dave:advanced_crafting") {
+                if (e?.typeId == "dave:stackable_crafting") {
                     let inv = e.getComponent("minecraft:inventory").container;
                     let grids = [
                         inv.getItem(1),
@@ -86,10 +86,10 @@ world.afterEvents.playerInteractWithEntity.subscribe(({
 }) => {
     const entity = target;
     const dimension = entity.dimension;
-    if (entity?.typeId === "dave:advanced_crafting") {
+    if (entity?.typeId === "dave:stackable_crafting") {
         if (!player.isSneaking) {
         } else {
-            const item = new ItemStack("dave:advanced_crafting", 1)
+            const item = new ItemStack("dave:stackable_crafting", 1)
             let block = dimension.getBlock(entity.location)
                 .setType("minecraft:air")
             dimension.spawnItem(item, entity.location)

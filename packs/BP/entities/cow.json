@@ -21,7 +21,7 @@
                 }
                 ]
             },
-            "minecraft:type_family": { "family": ["advanced_crafting"] },
+            "minecraft:type_family": { "family": ["stackable_crafting"] },
             "minecraft:health": { "value": 10, "max": 10 },
             "minecraft:damage_sensor": {
                 "triggers": { "cause": "all", "deals_damage": false }

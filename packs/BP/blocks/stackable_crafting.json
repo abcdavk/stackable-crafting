@@ -1,0 +1,103 @@
+{
+	"format_version": "1.20.10",
+	"minecraft:block": {
+		"description": {
+			"identifier": "dave:stackable_crafting",
+			"menu_category": {
+				"category": "items",
+				"group": "itemGroup.name.crafting_table"
+			},
+			"traits": {
+				"minecraft:placement_direction": {
+					"enabled_states": [
+						"minecraft:facing_direction"
+					]
+				}
+			}
+		},
+		"components": {
+			"minecraft:material_instances": {
+				"up": {
+					"texture": "stackable_crafting_top",
+					"render_method": "opaque"
+				},
+				"down": {
+					"texture": "stackable_crafting_bottom",
+					"render_method": "opaque"
+				},
+				"west": {
+					"texture": "stackable_crafting_side",
+					"render_method": "opaque"
+				},
+				"east": {
+					"texture": "stackable_crafting_side",
+					"render_method": "opaque"
+				},
+				"north": {
+					"texture": "stackable_crafting_front",
+					"render_method": "opaque"
+				},
+				"south": {
+					"texture": "stackable_crafting_front",
+					"render_method": "opaque"
+				}
+			},
+			"minecraft:destructible_by_mining": {
+				"seconds_to_destroy": 3
+			},
+			"minecraft:destructible_by_explosion": true,
+			"minecraft:breathability": "solid",
+			"minecraft:unit_cube": {},
+			"tag:wood": {}
+		},
+		"permutations": [{
+				"condition": "q.block_state('minecraft:facing_direction') == 'south' ",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [
+							0,
+							-180,
+							0
+						]
+					}
+				}
+			},
+			{
+				"condition": "q.block_state('minecraft:facing_direction') == 'north' ",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [
+							0,
+							0,
+							0
+						]
+					}
+				}
+			},
+			{
+				"condition": "q.block_state('minecraft:facing_direction') == 'west' ",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [
+							0,
+							90,
+							0
+						]
+					}
+				}
+			},
+			{
+				"condition": "q.block_state('minecraft:facing_direction') == 'east' ",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [
+							0,
+							-90,
+							0
+						]
+					}
+				}
+			}
+		]
+	}
+}

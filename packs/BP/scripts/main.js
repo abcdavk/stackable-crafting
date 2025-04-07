@@ -1,25 +1,23 @@
 import { ItemStack, system, world } from "@minecraft/server";
+import { recipes } from "./recipes";
 let CRAFTING_ENTITY_ID = "minecraft:cow";
-const recipes = [
-    {
-        ingredient: [
-            {
-                item: "minecraft:oak_log",
-                amount: 10
-            },
-            {
-                item: "minecraft:redstone",
-                amount: 10
-            }
-        ],
-        result: (() => {
-            const item = new ItemStack("minecraft:coal");
-            item.nameTag = "Super coal";
-            item.amount = 10;
-            return item;
-        })()
+world.afterEvents.playerPlaceBlock.subscribe(({ block, dimension, player }) => {
+    const { x, y, z } = block.location;
+    if (block.typeId === "dave:stackable_crafting") {
+        let stackableCrafting = dimension.spawnEntity("dave:stackable_crafting", block.center());
+        stackableCrafting.nameTag = "§u§i§1§r§fStackable Crafting";
+        let inv = stackableCrafting.getComponent("minecraft:inventory")?.container;
     }
-];
+});
+// Remove banned item from the world
+world.afterEvents.entitySpawn.subscribe(({ entity }) => {
+    if (entity && entity.typeId == "minecraft:item") {
+        const item = entity.getComponent("minecraft:item")?.itemStack;
+        if (item?.getLore()[0] == "§b§a§n§i§t§e§m") {
+            entity.remove();
+        }
+    }
+});
 system.runInterval(() => {
     world.getAllPlayers().forEach(player => {
         const dimension = world.getDimension(player.dimension.id);
@@ -38,10 +36,6 @@ system.runInterval(() => {
             }
         }
         nearbyEntities.forEach(entity => {
-            // Remove banned item from the world!!!!!!!!!!
-            if (entity?.typeId === "minecraft:item" && entity.getComponent("minecraft:item")?.itemStack.getLore().includes("§b§a§n§i§t§e§m")) {
-                entity.remove();
-            }
             // Crafting system
             if (entity?.typeId !== CRAFTING_ENTITY_ID)
                 return;
@@ -69,28 +63,29 @@ system.runInterval(() => {
                         const outputSlot = inventory.getItem(9);
                         // If the output slot is empty 
                         const isOutputEmpty = !outputSlot;
+                        const resultItem = recipe.result();
                         // If the output can still be added
-                        const isSameItemAndNotFull = outputSlot?.typeId === recipe.result.typeId &&
+                        const isSameItemAndNotFull = outputSlot?.typeId === resultItem.typeId &&
                             outputSlot.amount < outputSlot.maxAmount;
                         // Don't craft if can't
                         if (!isOutputEmpty && !isSameItemAndNotFull) {
                             return; // Stop crafting cause full
                         }
                         if (isOutputEmpty) {
-                            inventory.setItem(9, recipe.result);
+                            inventory.setItem(9, resultItem);
                         }
                         else if (isSameItemAndNotFull) {
-                            const newAmount = outputSlot.amount + recipe.result.amount;
-                            player.sendMessage(`${outputSlot.amount} + ${recipe.result.amount} = ${newAmount}`);
+                            const newAmount = outputSlot.amount + resultItem.amount;
+                            player.sendMessage(`${outputSlot.amount} + ${resultItem.amount} = ${newAmount}`);
                             player.sendMessage(`${newAmount <= outputSlot.maxAmount}`);
                             if (newAmount <= outputSlot.maxAmount) {
-                                const newResult = new ItemStack(recipe.result.typeId);
+                                const newResult = resultItem;
                                 newResult.amount = newAmount;
                                 inventory.setItem(9, newResult);
                             }
                             else {
-                                const newResult = new ItemStack(recipe.result.typeId);
-                                const remainsResult = new ItemStack(recipe.result.typeId);
+                                const newResult = resultItem;
+                                const remainsResult = resultItem;
                                 const remainsAmount = newAmount - outputSlot.maxAmount;
                                 remainsResult.amount = remainsAmount;
                                 newResult.amount = outputSlot.maxAmount;
