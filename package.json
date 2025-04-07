@@ -1,11 +1,12 @@
 {
   "name": "test",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "dev": "tsc && regolith run"
+    "dev": "rm -rf packs/BP/scripts && tsc && regolith run",
+    "release": "standard-version"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,8 @@
     "yarn": "^1.22.22"
   },
   "devDependencies": {
+    "rimraf": "^6.0.1",
+    "standard-version": "^9.5.0",
     "typescript": "^5.8.3"
   }
 }
