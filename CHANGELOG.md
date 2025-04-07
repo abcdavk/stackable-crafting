@@ -2,4 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2](https://github.com/abcdavk/stackable-crafting/compare/v1.0.1...v0.0.2) (2025-04-07)
+
+
+### Bug Fixes
+
+* fix checking item amount in the output slot ([7be32c4](https://github.com/abcdavk/stackable-crafting/commit/7be32c4a561b2bfc5ab44771f7b86e8ae398a612))
+
 ### 1.0.1 (2025-04-07)
