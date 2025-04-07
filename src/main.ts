@@ -1,102 +1,144 @@
 import { ItemStack, system, Vector3, world } from "@minecraft/server"
-import { CRAFTING_ENTITY_ID } from "./var"
+
+let CRAFTING_ENTITY_ID: string = "minecraft:cow"
 
 
 interface Buttons {
-    craft: {
-        slot: number[]
-        icon: string
-        title: string
-    }
+    [key: string]: {
+        slot: number[];
+        icon: string;
+        title: string;
+    };
 }
 
 interface Ingredient {
-    item: string
-    amount: number
+    item: string;
+    amount: number;
 }
 
 interface Recipe {
-    ingredient: Ingredient[]
-    result: ItemStack
+    ingredient: Ingredient[];
+    result: ItemStack;
 }
 
-let recipes: Recipe[] = [
+const recipes: Recipe[] = [
     {
         ingredient: [
             {
                 item: "minecraft:oak_log",
                 amount: 10
+            },
+            {
+                item: "minecraft:redstone",
+                amount: 10
             }
         ],
         result: new ItemStack("minecraft:coal")
     }
-]
-
-let buttons: Buttons = {
-    craft: {
-        slot: [10],
-        icon: "minecraft:mace",
-        title: "§r§eRun Craft\n§r§7[Click to craft]",
-    }
-}
+];
 
 system.runInterval(() => {
     world.getAllPlayers().forEach(player => {
-        if (player) {
-            world.getDimension(player.dimension.id).getEntities({
-                location: player.location,
-                maxDistance: 6
-            }).forEach(e => {
-                if (e?.typeId == CRAFTING_ENTITY_ID) {
-                    e.nameTag = "§u§i§1§r§fStackable Crafting";
-                    let inv = e.getComponent("minecraft:inventory")?.container;
-                    let grids = [
-                        inv?.getItem(1),
-                        inv?.getItem(2),
-                        inv?.getItem(3),
-                        inv?.getItem(4),
-                        inv?.getItem(5),
-                        inv?.getItem(6),
-                        inv?.getItem(7),
-                        inv?.getItem(8),
-                        inv?.getItem(9),
-                    ];
-                    (Object.keys(buttons) as (keyof Buttons)[]).forEach(buttonType => {
-                        let button = buttons[buttonType];
-                        button.slot.forEach(slotId => {
-                            let icon = new ItemStack(button.icon);
-                            icon.nameTag = button.title;
-                            icon.setLore([
-                                "§b§a§n§i§t§e§m", 
-                            ]);
-                            inv?.setItem(slotId, icon);
-                        });
-                    });
-                    
-                    grids.forEach(grid => {
-                        if (grid?.typeId !== undefined) {
-                            recipes.forEach(recipe => {
-                                recipe.ingredient.forEach(i => {
-                                    if (grid?.typeId === i.item && grid.amount >= i.amount) {
-                                        if (inv?.getItem(9) === undefined) inv?.setItem(9, recipe.result)
-                                        else if (inv?.getItem(9)?.typeId === recipe.result.typeId) {
-                                            const result = new ItemStack(recipe.result.typeId);
-                                            result.amount += 1
-                                            inv?.setItem(9, result)
-                                                
-                                        }
-                                    }
-                                });
-                            })
-                        } else {
-                            // no item
+        const dimension = world.getDimension(player.dimension.id);
+        const nearbyEntities = dimension.getEntities({
+            location: player.location,
+            maxDistance: 6
+        });
+
+
+        // Remove banned item from inventory
+        let playerInventory = player.getComponent("minecraft:inventory")?.container
+        if(playerInventory) { for (let i = 0; i < playerInventory?.size; i++) {
+            let getItemPlayer = playerInventory.getItem(i)
+            if (getItemPlayer?.getLore().includes("§b§a§n§i§t§e§m")) {
+                playerInventory.setItem(i, undefined)
+            }
+        }}
+
+        nearbyEntities.forEach(entity => {
+            // Remove banned item from the world!!!!!!!!!!
+            if (entity?.typeId === "minecraft:item" && entity.getComponent("minecraft:item")?.itemStack.getLore().includes("§b§a§n§i§t§e§m")) {
+                entity.remove()
+            }
+
+            // Crafting system
+            if (entity?.typeId !== CRAFTING_ENTITY_ID) return;
+            
+            entity.nameTag = "§u§i§1§r§fStackable Crafting";
+
+            const inventory = entity.getComponent("minecraft:inventory")?.container;
+            if (!inventory) return;
+
+            const gridSlots = Array.from({ length: 9 }, (_, i) => inventory.getItem(i));
+            if (inventory.getItem(10) === undefined) {
+                const craftButton = new ItemStack("minecraft:crafting_table");
+                craftButton.nameTag = "§r§eCraft";
+                craftButton.setLore(["§r§e[Shift + Right Click]/[Q] §7to craft","§b§a§n§i§t§e§m"]);
+                inventory.setItem(10, craftButton);
+                
+                
+                for (const recipe of recipes) {
+                    let matched = true;
+
+                    for (const ingredient of recipe.ingredient) {
+                        const found = gridSlots.find(item =>
+                            item?.typeId === ingredient.item &&
+                            item.amount >= ingredient.amount
+                        );
+
+                        if (!found) {
+                            matched = false;
+                            break;
                         }
-                    })
+                    }
+
+                    if (matched) {
+                        const outputSlot = inventory.getItem(9);
+                    
+                        // If the output slot is empty 
+                        const isOutputEmpty = !outputSlot;
+                    
+                        // If the output can still be added
+                        const isSameItemAndNotFull = outputSlot?.typeId === recipe.result.typeId &&
+                                                      outputSlot.amount < outputSlot.maxAmount;
+                    
+                        // Don't craft if can't
+                        if (!isOutputEmpty && !isSameItemAndNotFull) {
+                            return; // Stop crafting cause full
+                        }
+                    
+                        // Crafting process
+                        if (isOutputEmpty) {
+                            inventory.setItem(9, recipe.result);
+                        } else if (isSameItemAndNotFull) {
+                            const newResult = new ItemStack(recipe.result.typeId);
+                            newResult.amount = outputSlot.amount + 1;
+                            inventory.setItem(9, newResult);
+                        }
+                    
+                        // Reducing ingredient
+                        for (const ingredient of recipe.ingredient) {
+                            for (let i = 0; i < gridSlots.length; i++) {
+                                const item = gridSlots[i];
+                                if (item?.typeId === ingredient.item && item.amount >= ingredient.amount) {
+                                    let subtItemAmount = item.amount - ingredient.amount;
+                                    item.amount = subtItemAmount !== 0 ? subtItemAmount : item.amount;
+                                    inventory.setItem(i, subtItemAmount > 0 ? item : undefined);
+                                    break;
+                                }
+                            }
+                        }
+                    
+                        break; // stop setelah satu recipe
+                    }
+                    
                 }
-            })
-        }
-    })
-})
+            }
+        });
+    });
+});
+
+
 
 world.afterEvents.playerInteractWithEntity.subscribe(({
     player,

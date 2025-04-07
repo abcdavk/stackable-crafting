@@ -588,7 +588,7 @@
       {
         "recipe9@input_grid_panel": {
           "grid_position": [
-            18,
+            19,
             0
           ],
           "ignored": false,
@@ -597,7 +597,7 @@
               "2@chest.slot_grid_item": {
                 
                 "offset": [
-                  9,
+                  2,
                   74
                 ]
               }
@@ -606,7 +606,7 @@
               "recipe@chest.container_bg": {
                 "layer": 5,
                 "offset": [
-                  9,
+                  2,
                   74
                 ],
                 "size": [
