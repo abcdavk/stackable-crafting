@@ -1,0 +1,13 @@
+{
+    "format_version": "1.21.40",
+    "dave:stackable_crafting": {
+        "textures": {
+            "down": "stackable_crafting_bottom",
+            "up": "stackable_crafting_top",
+            "north": "stackable_crafting_front",
+            "east": "stackable_crafting_side",
+            "south": "stackable_crafting_side",
+            "west": "stackable_crafting_side"
+        }
+    }
+}

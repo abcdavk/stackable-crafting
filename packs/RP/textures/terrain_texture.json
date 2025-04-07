@@ -1,0 +1,19 @@
+{
+    "num_mip_levels": 4,
+    "padding": 8,
+    "resource_pack_name": "vanilla",
+    "texture_data": {
+        "stackable_crafting_top": {
+            "textures": "textures/blocks/stackable_crafting_top"
+        },
+        "stackable_crafting_bottom": {
+            "textures": "textures/blocks/stackable_crafting_bottom"
+        },
+        "stackable_crafting_front": {
+            "textures": "textures/blocks/stackable_crafting_front"
+        },
+        "stackable_crafting_side": {
+            "textures": "textures/blocks/stackable_crafting_side"
+        }
+    }
+}

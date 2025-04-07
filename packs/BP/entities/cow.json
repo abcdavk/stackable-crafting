@@ -1,0 +1,41 @@
+{
+    "format_version": "1.16.0",
+    "minecraft:entity": {
+        "description": {
+            "identifier": "minecraft:cow",
+            "is_spawnable": true,
+            "is_summonable": true,
+            "is_experimental": false
+        },
+        "components": {
+            "minecraft:custom_hit_test": {
+                "hitboxes": [
+                {
+                    "width": 1.1,
+                    "height": 1.1,
+                    "pivot": [
+                    0,
+                    0,
+                    0
+                    ]
+                }
+                ]
+            },
+            "minecraft:type_family": { "family": ["stackable_crafting"] },
+            "minecraft:health": { "value": 10, "max": 10 },
+            "minecraft:damage_sensor": {
+                "triggers": { "cause": "all", "deals_damage": false }
+            },
+            "minecraft:inventory": {
+                "additional_slots_per_strength": 0,
+                "can_be_siphoned_from": false,
+                "container_type": "container",
+                "inventory_size": 20,
+                "private": false,
+                "restrict_to_owner": false
+            }
+        },
+        "events": {
+        }
+    }
+}

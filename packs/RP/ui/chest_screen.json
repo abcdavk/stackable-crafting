@@ -1,0 +1,824 @@
+{
+  "namespace": "chest",
+  "chest_label": {
+    "$new_container_title|default": "$container_title",
+    "$disenchanter_name": "$container_title",
+    "text": "$new_container_title"
+  },
+  "arrow_large@common.cell_image": {
+    "texture": "textures/ui/arrow_large",
+    "layer": 1
+  },
+  "hammer_overlay@common.cell_image": {
+    "texture": "textures/ui/hammer_overlay",
+    "layer": 1
+  },
+
+  "container_bg@common.cell_image": {
+    "texture": "textures/ui/container_bg",
+    "layer": 1
+  },
+  "bg": {
+    "type": "panel",
+    "layer": 1,
+    "controls": [
+    ]
+  },
+  "side_panel_label@chest.chest_label": {
+    "type": "label",
+    "text": "Storage"
+  },
+  "input_grid_panel": {
+    "type": "panel",
+    "grid_position": [
+      0,
+      0
+    ],
+    "ignored": true
+  },
+  "small_chest_grid": {
+    "type": "grid",
+    "size": [
+      162,
+      54
+    ],
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "grid_dimensions": [
+      9,
+      3
+    ],
+    "grid_item_template": "chest.chest_grid_item",
+    "collection_name": "container_items"
+  },
+  "slot_grid_item@chest.chest_grid_item": {
+    
+    "layer": 2
+  },
+  "stackable_crafting": {
+    "type": "grid",
+    "size": [
+      80,
+      8
+    ],
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "grid_dimensions": [
+      12,
+      3
+    ],
+    "collection_name": "container_items",
+    "controls": [
+      {
+        "one@input_grid_panel": {
+          "grid_position": [
+            0,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                "offset": [
+                  0,
+                  0
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "two@input_grid_panel": {
+          "grid_position": [
+            1,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                "offset": [
+                  11,
+                  0
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "three@input_grid_panel": {
+          "grid_position": [
+            2,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                "offset": [
+                  22,
+                  0
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "four@input_grid_panel": {
+          "grid_position": [
+            3,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                "offset": [
+                  -20,
+                  18
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "five@input_grid_panel": {
+          "grid_position": [
+            4,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                "offset": [
+                  -9,
+                  18
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "six@input_grid_panel": {
+          "grid_position": [
+            5,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                "offset": [
+                  2,
+                  18
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "seven@input_grid_panel": {
+          "grid_position": [
+            6,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                "offset": [
+                  -40,
+                  36
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "eight@input_grid_panel": {
+          "grid_position": [
+            7,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                "offset": [
+                  -29,
+                  36
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "nine@input_grid_panel": {
+          "grid_position": [
+            8,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                
+                "offset": [
+                  -18,
+                  36
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "hammer@input_grid_panel": {
+          "grid_position": [
+            10,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                
+                "offset": [
+                  10,
+                  0
+                ]
+              }
+            },
+            {
+              "item@chest.hammer_overlay": {
+                "offset": [
+                  10,
+                  0
+                ],
+                "size": [
+                  16,
+                  16
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "result@input_grid_panel": {
+          "grid_position": [
+            9,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "1@chest.chest_grid_item": {
+                "offset": [
+                  58,
+                  18
+                ]
+              }
+            },
+            {
+              "item@chest.arrow_large": {
+                "offset": [
+                  18,
+                  18
+                ],
+                "size": [
+                  22,
+                  15
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "recipe1@input_grid_panel": {
+          "grid_position": [
+            11,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                
+                "offset": [
+                  -86,
+                  74
+                ]
+              }
+            },
+            {
+              "title": {
+                "type": "label",
+                "anchor_from": "top_middle",
+                "anchor_to": "top_middle",
+                "text": "§8Recipes:",
+                "layer": 31,
+                "localize": false,
+                "shadow": false,
+                "text_alignment": "center",
+                "offset": [
+                  -74,
+                  56
+                ]
+              }
+            },
+            {
+              "recipe@chest.container_bg": {
+                "layer": 4,
+                "offset": [
+                  -86,
+                  74
+                ],
+                "size": [
+                  18,
+                  18
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "recipe2@input_grid_panel": {
+          "grid_position": [
+            12,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                
+                "offset": [
+                  -75,
+                  74
+                ]
+              }
+            },
+            {
+              "recipe@chest.container_bg": {
+                "layer": 5,
+                "offset": [
+                  -75,
+                  74
+                ],
+                "size": [
+                  18,
+                  18
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "recipe3@input_grid_panel": {
+          "layer": 3,
+          "grid_position": [
+            13,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                
+                "offset": [
+                  -64,
+                  74
+                ]
+              }
+            },
+            {
+              "recipe@chest.container_bg": {
+                "layer": 6,
+                "offset": [
+                  -64,
+                  74
+                ],
+                "size": [
+                  18,
+                  18
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "recipe4@input_grid_panel": {
+          "grid_position": [
+            14,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                
+                "offset": [
+                  -53,
+                  74
+                ]
+              }
+            },
+            {
+              "recipe@chest.container_bg": {
+                "layer": 5,
+                "offset": [
+                  -53,
+                  74
+                ],
+                "size": [
+                  18,
+                  18
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "recipe5@input_grid_panel": {
+          "grid_position": [
+            15,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                
+                "offset": [
+                  -42,
+                  74
+                ]
+              }
+            },
+            {
+              "recipe@chest.container_bg": {
+                "layer": 5,
+                "offset": [
+                  -42,
+                  74
+                ],
+                "size": [
+                  18,
+                  18
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "recipe6@input_grid_panel": {
+          "grid_position": [
+            16,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                
+                "offset": [
+                  -31,
+                  74
+                ]
+              }
+            },
+            {
+              "recipe@chest.container_bg": {
+                "layer": 5,
+                "offset": [
+                  -31,
+                  74
+                ],
+                "size": [
+                  18,
+                  18
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "recipe7@input_grid_panel": {
+          "grid_position": [
+            17,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                
+                "offset": [
+                  -20,
+                  74
+                ]
+              }
+            },
+            {
+              "recipe@chest.container_bg": {
+                "layer": 5,
+                "offset": [
+                  -20,
+                  74
+                ],
+                "size": [
+                  18,
+                  18
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "recipe8@input_grid_panel": {
+          "grid_position": [
+            18,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                
+                "offset": [
+                  -9,
+                  74
+                ]
+              }
+            },
+            {
+              "recipe@chest.container_bg": {
+                "layer": 5,
+                "offset": [
+                  -9,
+                  74
+                ],
+                "size": [
+                  18,
+                  18
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "recipe9@input_grid_panel": {
+          "grid_position": [
+            19,
+            0
+          ],
+          "ignored": false,
+          "controls": [
+            {
+              "2@chest.slot_grid_item": {
+                
+                "offset": [
+                  2,
+                  74
+                ]
+              }
+            },
+            {
+              "recipe@chest.container_bg": {
+                "layer": 5,
+                "offset": [
+                  2,
+                  74
+                ],
+                "size": [
+                  18,
+                  18
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "small_chest_panel_top_half": {
+    "type": "panel",
+    "size": [
+      "100%",
+      "50%"
+    ],
+    "offset": [
+      0,
+      12
+    ],
+    "anchor_to": "top_left",
+    "anchor_from": "top_left",
+    "controls": [
+      {
+        "chest_label@chest.chest_label": {}
+      },
+      {
+        "small_chest_grid@chest.small_chest_grid": {
+          "offset": [
+            7,
+            9
+          ]
+        }
+      }
+    ]
+  },
+  "hotbar_side_panel@common.common_panel": {
+    "type": "panel",
+    "layer": -6,
+    "size": [
+      22,
+      166
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "$show_close_button": false
+  },
+  "stackable_crafting_top_half": {
+    "type": "panel",
+    "size": [
+      220,
+      70
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "anchor_to": "top_left",
+    "anchor_from": "top_left", 
+    "controls": [
+      {
+        "chest_label@chest.chest_label": {
+          "offset": [
+            5,
+            5
+          ],
+          "layer": 1
+        }
+      },
+      {
+        "large_chest_grid@chest.stackable_crafting": {
+          "offset": [
+            26,
+            35
+          ],
+          "layer": 1
+        }
+      },
+      {
+        "rt@chest.bg": {
+          "layer": 0,
+          "size": [
+            130,
+            130
+          ],
+          "offset": [
+            -23,
+            55
+          ]
+        }
+      }
+    ]
+  },
+  "small_root_panel@common.root_panel": {
+    "$chest_panel|default": "chest.small_chest_panel_top_half",
+    "layer": 1,
+    "controls": [
+      {
+        "common_panel@common.common_panel": {}
+      },
+      {
+        "chest_panel": {
+          "type": "panel",
+          "layer": 5,
+          "controls": [
+            {
+              "small_chest_panel_top_half@$chest_panel": {}
+            },
+            {
+              "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {}
+            },
+            {
+              "hotbar_grid@common.hotbar_grid_template": {}
+            },
+            {
+              "inventory_take_progress_icon_button@common.inventory_take_progress_icon_button": {}
+            }
+          ]
+        }
+      },
+      {
+        "inventory_selected_icon_button@common.inventory_selected_icon_button": {}
+      },
+      {
+        "gamepad_cursor@common.gamepad_cursor_button": {}
+      }
+    ]
+  },
+  "stackable_crafting_root_panel@small_root_panel": {
+    "size": [
+      176,
+      245
+    ],
+    "$chest_panel": "chest.stackable_crafting_top_half"
+  },
+  "small_chest_panel": {
+    "type": "panel",
+    "controls": [
+      {
+        "container_gamepad_helpers@common.container_gamepad_helpers": {}
+      },
+      {
+        "selected_item_details_factory@common.selected_item_details_factory": {}
+      },
+      {
+        "item_lock_notification_factory@common.item_lock_notification_factory": {}
+      },
+      {
+        "root_panel@$root_panel": {}
+      },
+      {
+        "flying_item_renderer@common.flying_item_renderer": {}
+      }
+    ]
+  },
+  "ender_chest_panel@chest.small_chest_panel": {},
+  "small_chest_screen@common.inventory_screen_common": {
+    "$close_on_player_hurt|default": true,
+    "$use_custom_pocket_toast|default": false,
+    "use_custom_pocket_toast": "$use_custom_pocket_toast",
+    "close_on_player_hurt": "$close_on_player_hurt",
+    "$root_panel|default": "chest.small_root_panel",
+    "$new_container_title|default": "$container_title",
+    "$container_size|default": 27,
+    "modifications": [
+      {
+        "array_name": "variables",
+        "operation": "insert_back",
+        "value": {
+          "requires": "($pocket_screen and ($new_container_title = '§u§i§1§r§fStackable Crafting'))",
+          "$use_custom_pocket_toast": true,
+          "$root_panel": "chest.stackable_crafting_root_panel",
+          "$new_container_title": "Stackable Crafting",
+          "$container_size": 54
+        }
+      },
+      {
+        "array_name": "variables",
+        "operation": "insert_back",
+        "value": {
+          "requires": "($desktop_screen and ($new_container_title = '§u§i§1§r§fStackable Crafting'))",
+          "$use_custom_pocket_toast": true,
+          "$root_panel": "chest.stackable_crafting_root_panel",
+          "$screen_content": "chest.stackable_crafting_root_panel",
+          "$new_container_title": "Stackable Crafting",
+          "$container_size": 54
+        }
+      }
+    ]
+  },
+  "ender_chest_screen@common.inventory_screen_common": {
+    "$close_on_player_hurt|default": true,
+    "$use_custom_pocket_toast|default": false,
+    "close_on_player_hurt": "$close_on_player_hurt",
+    "use_custom_pocket_toast": "$use_custom_pocket_toast",
+    "variables": [
+      {
+        "requires": "$desktop_screen",
+        "$screen_content": "chest.ender_chest_panel",
+        "$screen_bg_content": "common.screen_background",
+        "$screen_background_alpha": 0.4
+      },
+      {
+        "requires": "$pocket_screen",
+        "$use_custom_pocket_toast": true,
+        "$screen_content": "pocket_containers.ender_chest_panel"
+      }
+    ]
+  }
+} 

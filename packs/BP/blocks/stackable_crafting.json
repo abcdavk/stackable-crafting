@@ -1,0 +1,20 @@
+{
+	"format_version": "1.20.20",
+	"minecraft:block": {
+		"description": {
+			"identifier": "dave:stackable_crafting",
+			"menu_category": {
+				"category": "items",
+				"group": "itemGroup.name.crafting_table"
+			}
+		},
+		"components": {
+			"minecraft:display_name": "Stackable Crafting",
+			"minecraft:geometry": "minecraft:geometry.full_block",
+			"minecraft:destructible_by_mining": {
+				"seconds_to_destroy": 3
+			},
+			"minecraft:destructible_by_explosion": true
+		}
+	}
+}
