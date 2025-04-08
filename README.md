@@ -3,7 +3,7 @@ Hypixel Skyblock crafting style like. Using entity, block and scripting API.
 
 ## 📦 Crafting Recipes Documentation
 
-Below describes the custom crafting recipes used in the Minecraft server system. It supports both shaped `symbolic recipes` and `direct ingredient recipes`.
+Below describes the custom crafting recipes used in the Minecraft server system. It supports both shaped `symbolic recipes` and `direct ingredient recipes` or maybe generate it with `random recipes`.
 
 ### You can choose to use TS or JS:
 
@@ -12,6 +12,12 @@ Below describes the custom crafting recipes used in the Minecraft server system.
 
 ### 🧩 `shapedRecipe(...)` Format
 The `shapedRecipe` function allows you to define **grid-based** (3x3) crafting recipes using symbolic keys. Useful when creating complex crafting shapes in a more readable format.
+
+#### Requirements:
+
+```ts
+import { shapedRecipe } from "./libs/lib";
+```
 
 #### Example:
 
@@ -45,6 +51,79 @@ shapedRecipe({
 |g        |minecraft:gold_block   |32   |
 
 This pattern creates an Enchanted Diamond Block when the input grid is matched exactly.
+
+### `randomRecipe(...)` Format
+This helper generate randomly recipes for you (VERY VERY random). But, you can organize the properties to get better result.
+
+#### Requirements:
+
+```ts
+import { randomRecipe } from "./libs/lib";
+```
+
+#### Items Array Pool:
+
+Inline array pool:
+```ts
+randomRecipe(["minecraft:iron_ingot", "minecraft:gold_ingot", "minecraft:diamond"]),
+randomRecipe(["minecraft:iron_ingot", "minecraft:gold_ingot", "minecraft:diamond"]),
+randomRecipe(["minecraft:iron_ingot", "minecraft:gold_ingot", "minecraft:diamond"]),
+```
+
+Separated array pool:
+
+```ts
+// Write array in the same file
+const mineralsPool: string[] = ["minecraft:iron_ingot", "minecraft:gold_ingot", "minecraft:diamond"]
+
+export const recipes: Recipe[] = [
+  randomRecipe(mineralsPool),
+  randomRecipe(mineralsPool),
+  randomRecipe(mineralsPool),
+  //...
+];
+```
+```ts
+// Import array, there is few built-in items pool. Check src/libs/..
+// Of course you can make your own items pool.
+import { minerals } from "./libs/minerals"; 
+
+export const recipes: Recipe[] = [
+  randomRecipe(minerals),
+];
+```
+
+#### Options {}
+```ts
+interface RandomRecipeOptions {
+  ingredient?: {
+    total?: [number, number]; 
+    amount?: [number, number];
+  };
+  result?: {
+    item?: string[];
+    amount?: [number, number];
+    prefix?: string;
+    suffix?: string;
+    lore?: string[];
+  };
+}
+```
+
+Example usage:
+```ts
+  randomRecipe(all_type_id, {
+    ingredient: {
+      total: [ 9, 9 ],
+      amount: [ 32, 32 ]
+    }
+    result: {
+      prefix: "§dEnchanted",
+      amount: [32, 32],
+    }
+  }),
+```
+
 
 ### 🛠️ Direct Ingredient Recipe
 
