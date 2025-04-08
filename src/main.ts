@@ -3,16 +3,57 @@ import { recipes } from "./recipes";
 let CRAFTING_ENTITY_ID: string = "dave:stackable_crafting"
 
 interface Ingredient {
-    item: string;
+    item: string | null;
     amount: number;
 }
 
-
-
-export default interface Recipe {
+export interface Recipe {
+    key?: {
+        [key: string]: Ingredient
+    };
     ingredient: Ingredient[];
     result(): ItemStack;
 }
+
+/**
+ * Converts a simplified shaped recipe format into a complete Recipe object
+ * by expanding symbolic keys into full ingredient data.
+ *
+ * @param shaped - An object representing a shaped crafting recipe.
+ * @param shaped.key - A dictionary where each key is a symbol used in the `ingredient` array,
+ * and its value is an object that defines the actual item and the required amount.
+ * @param shaped.key.{string} - A symbolic key like "x" or "o" representing an ingredient in the recipe grid.
+ * @param shaped.key.{string}.item - The item ID (e.g., "minecraft:diamond_block") or "empty"/"null" for blank slots.
+ * @param shaped.key.{string}.amount - The number of items required for that ingredient.
+ * @param shaped.ingredient - A 9-element array (3x3 grid) of symbols representing the layout of ingredients.
+ * @param shaped.result - A function that returns the resulting crafted `ItemStack`.
+ *
+ * @returns A fully expanded `Recipe` object ready to be used in the crafting system.
+ */
+export function shapedRecipe(shaped: {
+    key: Record<string, { item: string; amount: number }>;  // <--- I dont know what this is. But, it works! :D
+    ingredient: string[];
+    result: () => ItemStack;
+  }) {
+    const { key, ingredient, result } = shaped;
+  
+    if (ingredient.length !== 9) {
+      throw new Error("Recipe must have exactly 9 ingredient slots (3x3 grid).");
+    }
+  
+    const shapedIngredient = ingredient.map(symbol => {
+      const resolved = key[symbol];
+      if (!resolved) {
+        throw new Error(`Unknown symbol '${symbol}' in recipe`);
+      }
+      return resolved;
+    });
+  
+    return {
+      ingredient: shapedIngredient,
+      result,
+    };
+  }
 
 world.afterEvents.playerPlaceBlock.subscribe(({
     block, dimension, player
@@ -65,7 +106,6 @@ system.runInterval(() => {
             const maxRecipeSlots = 9;
             let startSlot = entity.getDynamicProperty('crafting:startSlot') as number || 11;
 
-            // Step 1: Deteksi jika tombol ditekan (slot kosong padahal sebelumnya ada)
             if (inventory.getItem(20) === undefined && entity.getDynamicProperty("crafting:leftButtonWasPresent") === true) {
                 startSlot = Math.max(11, startSlot - maxRecipeSlots); // prevent < 11
                 entity.setDynamicProperty("crafting:startSlot", startSlot);
@@ -77,7 +117,6 @@ system.runInterval(() => {
                 entity.setDynamicProperty("crafting:startSlot", startSlot);
             }
 
-            // Step 2: Render recipes
             for (let i = 0; i < maxRecipeSlots; i++) {
                 const recipeIndex = i + (startSlot - 11);
                 if (recipes[recipeIndex]) {
@@ -87,14 +126,14 @@ system.runInterval(() => {
                         ingredients.push(`§r§7${ingr.item} §ox${ingr.amount}`);
                     }
                     ingredients.push(" ", `§r§9Result: §7${recipeItem.typeId} §ox${recipeItem.amount}`);
+                    ingredients.push("§b§a§n§i§t§e§m")
                     recipeItem.setLore(ingredients);
                     inventory.setItem(11 + i, recipeItem);
                 } else {
-                    inventory.setItem(11 + i, undefined); // Kosongkan jika tidak ada resep
+                    inventory.setItem(11 + i, undefined); 
                 }
             }
 
-            // Step 3: Render tombol (hanya jika kosong)
             if (inventory.getItem(20) === undefined) {
                 const backButton = new ItemStack("dave:left_arrow");
                 backButton.setLore([
@@ -113,8 +152,6 @@ system.runInterval(() => {
                 ]);
                 inventory.setItem(21, nextButton);
             }
-
-            // Step 4: Tandai tombol sudah dipasang (untuk deteksi di loop berikutnya)
             entity.setDynamicProperty("crafting:leftButtonWasPresent", inventory.getItem(20) !== undefined);
             entity.setDynamicProperty("crafting:rightButtonWasPresent", inventory.getItem(21) !== undefined);
 
@@ -134,14 +171,20 @@ system.runInterval(() => {
                 for (const recipe of recipes) {
                     let matched = true;
 
-                    for (const ingredient of recipe.ingredient) {
-                        const found = gridSlots.find(item =>
-                            item?.typeId === ingredient.item &&
-                            item.amount >= ingredient.amount
-                        );
-                        if (!found) {
-                            matched = false;
-                            break;
+                    for (let i = 0; i < recipe.ingredient.length; i++) {
+                        const ingredient = recipe.ingredient[i];
+                        const item = gridSlots[i];
+                
+                        if (ingredient.item === "empty") {
+                            if (item !== undefined) {
+                                matched = false;
+                                break;
+                            }
+                        } else {
+                            if (!item || item.typeId !== ingredient.item || item.amount < ingredient.amount) {
+                                matched = false;
+                                break;
+                            }
                         }
                     }
                     if (matched) {
@@ -152,13 +195,17 @@ system.runInterval(() => {
                         const resultItem = recipe.result();
                         // If the output can still be added
                         const isSameItemAndNotFull = outputSlot?.typeId === resultItem.typeId &&
-                                                      outputSlot.amount < outputSlot.maxAmount
-                    
+                                                      outputSlot.amount < outputSlot.maxAmount;
+                        
+                        let recipeCompleted: number = 0;
+                                                
                         // Don't craft if can't
                         if (!isOutputEmpty && !isSameItemAndNotFull) {
                             return; // Stop crafting cause full
                         }
-                    
+                        if (recipeCompleted === 9) {
+                            
+                        }
                         if (isOutputEmpty) {
                             inventory.setItem(9, resultItem);
                         } else if (isSameItemAndNotFull) {
@@ -178,22 +225,21 @@ system.runInterval(() => {
                                 world.getDimension(player.dimension.id).spawnItem(remainsResult, player.location)
                             }
                         }
-                    
-                        // Reducing ingredient
-                        for (const ingredient of recipe.ingredient) {
-                            for (let i = 0; i < gridSlots.length; i++) {
-                                const item = gridSlots[i];
-                                if (item?.typeId === ingredient.item && item.amount >= ingredient.amount) {
-                                    let subtItemAmount = item.amount - ingredient.amount;
-                                    item.amount = subtItemAmount !== 0 ? subtItemAmount : item.amount;
-                                    inventory.setItem(i, subtItemAmount > 0 ? item : undefined);
-                                    break;
+                        for (let i = 0; i < recipe.ingredient.length; i++) {
+                            const ingredient = recipe.ingredient[i];
+                            const item = gridSlots[i];
+                        
+                            if (item && item.typeId === ingredient.item && item.amount >= ingredient.amount) {
+                                const remainingAmount = item.amount - ingredient.amount;
+                                if (remainingAmount > 0) {
+                                    item.amount = remainingAmount;
+                                    inventory.setItem(i, item);
+                                } else {
+                                    inventory.setItem(i, undefined);
                                 }
                             }
                         }
-                    
-                        break; // stop setelah satu recipe
-                    }                    
+                    }
                 }
             }
         });
@@ -211,11 +257,10 @@ world.afterEvents.playerInteractWithEntity.subscribe(({
     if (entity?.typeId === CRAFTING_ENTITY_ID) {
         if (!player.isSneaking) {
         } else {
-            const item = new ItemStack("minecraft:crafting_table", 1)
+            const item = new ItemStack("dave:stackable_crafting", 1)
             let block = dimension.getBlock(entity.location)?.setType("minecraft:air")
             dimension.spawnItem(item, entity.location)
             entity.kill()
-            console.warn("test")
         }
     }
 })

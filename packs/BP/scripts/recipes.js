@@ -1,5 +1,24 @@
 import { ItemStack } from "@minecraft/server";
+import { shapedRecipe } from "./main";
 export const recipes = [
+    shapedRecipe({
+        key: {
+            x: { item: "empty", amount: 1 },
+            o: { item: "minecraft:diamond_block", amount: 32 },
+            g: { item: "minecraft:gold_block", amount: 32 },
+        },
+        ingredient: [
+            "x", "o", "x",
+            "o", "g", "o",
+            "x", "o", "x"
+        ],
+        result: () => {
+            const item = new ItemStack("minecraft:diamond_block");
+            item.nameTag = "§r§bEnchanted Diamond Block";
+            item.amount = 1;
+            return item;
+        },
+    }),
     {
         ingredient: [
             { item: "minecraft:oak_log", amount: 16 },
