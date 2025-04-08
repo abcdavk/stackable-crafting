@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.8](https://github.com/abcdavk/stackable-crafting/compare/v0.0.7...v0.0.8) (2025-04-08)
+
+
+### Features
+
+* use randomRecipe() to generate randomly generated recipe ([0b314e1](https://github.com/abcdavk/stackable-crafting/commit/0b314e1c5584d4205211796494e6f4b01ea6bb7a))
+* you can generate random recipe by using randomRecipe() ([2dc175a](https://github.com/abcdavk/stackable-crafting/commit/2dc175ad098b68c886aad8a094b47501a4932ab1))
+
 ### 0.0.7 (2025-04-08)
 
 
