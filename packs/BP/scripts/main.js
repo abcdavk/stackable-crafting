@@ -1,38 +1,7 @@
 import { ItemStack, system, world } from "@minecraft/server";
 import { recipes } from "./recipes";
+import { formatIdToName } from "./libs/lib";
 let CRAFTING_ENTITY_ID = "dave:stackable_crafting";
-/**
- * Converts a simplified shaped recipe format into a complete Recipe object
- * by expanding symbolic keys into full ingredient data.
- *
- * @param shaped - An object representing a shaped crafting recipe.
- * @param shaped.key - A dictionary where each key is a symbol used in the `ingredient` array,
- * and its value is an object that defines the actual item and the required amount.
- * @param shaped.key.{string} - A symbolic key like "x" or "o" representing an ingredient in the recipe grid.
- * @param shaped.key.{string}.item - The item ID (e.g., "minecraft:diamond_block") or "empty"/"null" for blank slots.
- * @param shaped.key.{string}.amount - The number of items required for that ingredient.
- * @param shaped.ingredient - A 9-element array (3x3 grid) of symbols representing the layout of ingredients.
- * @param shaped.result - A function that returns the resulting crafted `ItemStack`.
- *
- * @returns A fully expanded `Recipe` object ready to be used in the crafting system.
- */
-export function shapedRecipe(shaped) {
-    const { key, ingredient, result } = shaped;
-    if (ingredient.length !== 9) {
-        throw new Error("Recipe must have exactly 9 ingredient slots (3x3 grid).");
-    }
-    const shapedIngredient = ingredient.map(symbol => {
-        const resolved = key[symbol];
-        if (!resolved) {
-            throw new Error(`Unknown symbol '${symbol}' in recipe`);
-        }
-        return resolved;
-    });
-    return {
-        ingredient: shapedIngredient,
-        result,
-    };
-}
 world.afterEvents.playerPlaceBlock.subscribe(({ block, dimension, player }) => {
     const { x, y, z } = block.location;
     if (block.typeId === "dave:stackable_crafting") {
@@ -88,15 +57,19 @@ system.runInterval(() => {
             for (let i = 0; i < maxRecipeSlots; i++) {
                 const recipeIndex = i + (startSlot - 11);
                 if (recipes[recipeIndex]) {
-                    const recipeItem = recipes[recipeIndex].result();
-                    const ingredients = [" ", "§r§9Recipes:"];
+                    const resultItem = recipes[recipeIndex].result();
+                    const ingredients = ["§b§a§n§i§t§e§m"];
+                    resultItem.getLore().forEach(l => {
+                        ingredients.push(l);
+                    });
+                    ingredients.push(" ");
+                    ingredients.push("§r§9Recipes:");
                     for (const ingr of recipes[recipeIndex].ingredient) {
-                        ingredients.push(`§r§7${ingr.item} §ox${ingr.amount}`);
+                        ingredients.push(`§r§7- ${formatIdToName(ingr.item)} §ox${ingr.amount}`);
                     }
-                    ingredients.push(" ", `§r§9Result: §7${recipeItem.typeId} §ox${recipeItem.amount}`);
-                    ingredients.push("§b§a§n§i§t§e§m");
-                    recipeItem.setLore(ingredients);
-                    inventory.setItem(11 + i, recipeItem);
+                    ingredients.push(" ", `§r§9Result: §7${resultItem.nameTag ? resultItem.nameTag : formatIdToName(resultItem.typeId)} §ox${resultItem.amount}`);
+                    resultItem.setLore(ingredients);
+                    inventory.setItem(11 + i, resultItem);
                 }
                 else {
                     inventory.setItem(11 + i, undefined);

@@ -1,6 +1,28 @@
 import { ItemStack } from "@minecraft/server";
-import { shapedRecipe } from "./main";
+import { wood_type } from "./libs/wood_type";
+import { all_type_ids } from "./libs/all_type_ids";
+import { minerals } from "./libs/minerals";
+import { randomRecipe, shapedRecipe } from "./libs/lib";
 export const recipes = [
+    randomRecipe(all_type_ids),
+    randomRecipe(all_type_ids),
+    randomRecipe(all_type_ids),
+    randomRecipe(all_type_ids),
+    randomRecipe(all_type_ids),
+    randomRecipe(minerals, {
+        result: {
+            prefix: "§dEnchanted",
+            item: all_type_ids
+        }
+    }),
+    randomRecipe(wood_type, {
+        ingredient: {
+            total: [9, 9]
+        },
+        result: {
+            prefix: "Normal"
+        }
+    }),
     shapedRecipe({
         key: {
             x: { item: "empty", amount: 1 },
@@ -19,6 +41,17 @@ export const recipes = [
             return item;
         },
     }),
+    {
+        ingredient: [
+            { item: "minecraft:iron", amount: 8 },
+            { item: "minecraft:stick", amount: 8 },
+        ],
+        result: () => {
+            const item = new ItemStack("minecraft:arrow");
+            item.amount = 1;
+            return item;
+        },
+    },
     {
         ingredient: [
             { item: "minecraft:oak_log", amount: 16 },
