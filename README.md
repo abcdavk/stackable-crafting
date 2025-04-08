@@ -7,7 +7,7 @@ Below describes the custom crafting recipes used in the Minecraft server system.
 
 ### You can choose to use TS or JS:
 
-* [Setup for TypeScript](#setup)
+* [Setup for TypeScript](#-setup)
 * Or download the .mcaddon if you want to use JS.
 
 ### 🧩 `shapedRecipe(...)` Format
