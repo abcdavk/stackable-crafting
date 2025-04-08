@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.7 (2025-04-08)
+
+
+### Features
+
+* add page system ([4f00c92](https://github.com/abcdavk/stackable-crafting/commit/4f00c92070f1d9d3941c5873342808af76168f5e))
+* now you can make shaped recipes. shapedRecipe() ([3d99856](https://github.com/abcdavk/stackable-crafting/commit/3d99856dcfb118fe8f640de29f2d6c6d6b73d94a))
+
+
+### Bug Fixes
+
+* banned item drop no longer drop ([f0ef846](https://github.com/abcdavk/stackable-crafting/commit/f0ef84693573855b307d8082698eedc223560933))
+
 ### 0.0.6 (2025-04-07)
 
 
