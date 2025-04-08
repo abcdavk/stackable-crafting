@@ -26,4 +26,8 @@ Install all dependencies for this project.
 ### 4. Test/Run
 You can simply run in terminal `npm run dev`, it will export the `/packs` folder to `com.mojang`.
 
-If you're using linux you must add environtment variable to `~/.profile` or `~/.zshrc` (depend on your terminal):
+If you're using linux you must add environtment variable to `~/.profile` or `~/.zshrc` (depend on your terminal), for example:
+
+```bash
+export COM_MOJANG="/home/abcdave/.var/app/io.mrarm.mcpelauncher/data/mcpelauncher/games/com.mojang"
+```
